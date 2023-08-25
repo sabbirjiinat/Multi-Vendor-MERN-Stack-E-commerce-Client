@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../provider/AuthProvider";
 import SaveUserToDb from "../../api/SaveUserToDB";
 
-const SingUpPage = () => {
+const ShopCreate= () => {
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -158,10 +158,10 @@ const SingUpPage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Register as a new user
+          Register as a new seller
         </h2>
       </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[35rem]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
@@ -169,13 +169,29 @@ const SingUpPage = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name
+               Shop Name
               </label>
               <div className="mt-1">
                 <input
-                  {...register("name")}
+                  {...register("shopName")}
                   type="text"
-                  name="name"
+                  name="shopName"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+              Phone Number
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register("PhoneNumber")}
+                  type="number"
+                  name="PhoneNumber"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -194,6 +210,38 @@ const SingUpPage = () => {
                   type="email"
                   name="email"
                   autoComplete="email"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Address
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register("address")}
+                  type="text"
+                  name="address"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="zipCode"
+                className="block text-sm font-medium text-gray-700"
+              >
+              Zip Code
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register("zipCode")}
+                  type="number"
+                  name="zipCode"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -279,7 +327,7 @@ const SingUpPage = () => {
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
               <h4>Already have an account?</h4>
-              <Link to="/login" className="text-blue-600 pl-2">
+              <Link to="/shop-login" className="text-blue-600 pl-2">
                 Sign In
               </Link>
             </div>
@@ -302,4 +350,4 @@ const SingUpPage = () => {
   );
 };
 
-export default SingUpPage;
+export default ShopCreate;

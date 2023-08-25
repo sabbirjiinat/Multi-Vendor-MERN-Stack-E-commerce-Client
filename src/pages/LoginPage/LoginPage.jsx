@@ -1,14 +1,61 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../style/style";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import { TbFidgetSpinner } from "react-icons/tb";
+import { AuthContext } from "../../provider/AuthProvider";
 
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const {signInWithEmail} = useContext(AuthContext)
+  const { register, handleSubmit } = useForm();
+  const navigate  = useNavigate()
+  const location = useLocation()
+  const [loader,setLoader] = useState(false)
+  const from = location?.state?.from?.pathname || '/';
+  const onSubmit = data =>{
+    if (data.email.length === 0) {
+      return toast.error("Email is required", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else if (data.password.length < 6) {
+      return toast.error("Password must be at least six character", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+   
+    }
+setLoader(true)
+    signInWithEmail(data.email, data.password)
+    .then(()=>{
+      setLoader(false)
+      navigate(from, {replace:true})
+      Swal.fire({
+        position: 'center-center',
+        icon: 'success',
+        title: 'You have login successfully',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    })
+  };
 
  
 
@@ -21,7 +68,7 @@ const LoginPage = () => {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -31,12 +78,10 @@ const LoginPage = () => {
               </label>
               <div className="mt-1">
                 <input
+                  {...register("email")}
                   type="email"
                   name="email"
                   autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -50,12 +95,10 @@ const LoginPage = () => {
               </label>
               <div className="mt-1 relative">
                 <input
+                  {...register("password")}
                   type={visible ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {visible ? (
@@ -102,7 +145,11 @@ const LoginPage = () => {
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                Submit
+                 {loader ? (
+                  <TbFidgetSpinner className="animate-spin h-6" />
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
@@ -114,6 +161,7 @@ const LoginPage = () => {
           </form>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
