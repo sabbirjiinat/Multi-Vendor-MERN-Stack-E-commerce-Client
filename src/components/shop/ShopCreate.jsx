@@ -34,8 +34,19 @@ const ShopCreate= () => {
   };
 
   const onSubmit = (data) => {
-    if (data.name.length === 0) {
-      return toast.error("Name is required", {
+    if (data.shopName.length === 0) {
+      return toast.error("Shop name is required", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else if (data.phoneNumber.length === 0) {
+      return toast.error("Phone number is required", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -56,7 +67,31 @@ const ShopCreate= () => {
         progress: undefined,
         theme: "light",
       });
-    } else if (data.password.length === 0) {
+    } else if (data.address.length === 0) {
+      return toast.error("Address is required", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    else if(data.zipCode.length === 0){
+      return toast.error("Zip code is required", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    else if(data.password.length === 0){
       return toast.error("Password is required", {
         position: "bottom-right",
         autoClose: 5000,
@@ -67,7 +102,8 @@ const ShopCreate= () => {
         progress: undefined,
         theme: "light",
       });
-    } else if (data.image.length === 0) {
+    }
+    else if(data.image.length === 0){
       return toast.error("Image is required", {
         position: "bottom-right",
         autoClose: 5000,
@@ -166,7 +202,7 @@ const ShopCreate= () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                Shop Name
@@ -182,16 +218,16 @@ const ShopCreate= () => {
             </div>
             <div>
               <label
-                htmlFor="email"
+                htmlFor="number"
                 className="block text-sm font-medium text-gray-700"
               >
               Phone Number
               </label>
               <div className="mt-1">
                 <input
-                  {...register("PhoneNumber")}
+                  {...register("phoneNumber")}
                   type="number"
-                  name="PhoneNumber"
+                  name="phoneNumber"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>

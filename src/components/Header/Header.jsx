@@ -25,6 +25,8 @@ const Header = () => {
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
   const { user } = useContext(AuthContext);
+  // const seller = true;
+  const isAdmin = true
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -90,14 +92,36 @@ const Header = () => {
               </div>
             ) : null}
           </div>
-          <div className={`${styles.button}`}>
-            <Link to="/shop-create">
-              <h1 className="text-[#fff] flex items-center">
-                Become Seller
-                <IoIosArrowForward className="ml-1" />
-              </h1>
-            </Link>
-          </div>
+          {/* Todo seller authenticate */}
+          {/* { seller ? (
+             <div className={`${styles.button}`}>
+             <Link to="/dashboard">
+               <h1 className="text-[#fff] flex items-center">
+                 Dashboard
+                 <IoIosArrowForward className="ml-1" />
+               </h1>
+             </Link>
+           </div>
+          ) : (
+            <div className={`${styles.button}`}>
+              <Link to="/shop-create">
+                <h1 className="text-[#fff] flex items-center">
+                  Become Seller
+                  <IoIosArrowForward className="ml-1" />
+                </h1>
+              </Link>
+            </div>
+          )} */}
+          {isAdmin && (
+             <div className={`${styles.button}`}>
+             <Link to="/dashboard-admin">
+               <h1 className="text-[#fff] flex items-center">
+                 Dashboard
+                 <IoIosArrowForward className="ml-1" />
+               </h1>
+             </Link>
+           </div>
+          )}
         </div>
       </div>
       {/* Todo for overflow content */}

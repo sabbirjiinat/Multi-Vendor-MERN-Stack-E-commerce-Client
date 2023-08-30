@@ -8,8 +8,13 @@ import BestSellingPage from "../pages/BestSellingPage/BestSellingPage";
 import EventsPage from "../pages/EventsPage/EventsPage";
 import FAQPages from "../pages/FAQPages/FAQPages";
 import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage";
-import ProfilePage from '../pages/ProfilePage/ProfilePage'
-import ShopCreatePage from '../pages/ShopCreatePage/ShopCreatePage'
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import ShopCreatePage from "../pages/ShopCreatePage/ShopCreatePage";
+import ShopDashboardPage from "../pages/Shop/ShopDashboardPage";
+import ShopHomePage from "../pages/Shop/ShopHomePage";
+import ShopCreateProduct from "../pages/Shop/ShopCreateProduct";
+import AdminDashboard from '../pages/Admin/AdminDashboard/AdminDashboard'
+import Layout from "../pages/Admin/Layout/Layout";
 
 const router = createBrowserRouter([
   {
@@ -34,19 +39,32 @@ const router = createBrowserRouter([
       },
       {
         path: "/events",
-        element: <EventsPage/>,
+        element: <EventsPage />,
       },
       {
         path: "/faq",
-        element: <FAQPages/>,
+        element: <FAQPages />,
       },
       {
         path: "/profile",
-        element: <ProfilePage/>,
+        element: <ProfilePage />,
       },
       {
         path: "/shop-create",
-        element: <ShopCreatePage/>,
+        element: <ShopCreatePage />,
+      },
+      {
+        path: "/dashboard",
+        element: <ShopDashboardPage />,
+      },
+      {
+        path: "/dashboard-create-product",
+        element: <ShopCreateProduct />,
+      },
+      /* todo */
+      {
+        path: "/shop/user",
+        element: <ShopHomePage />,
       },
       {
         path: "/login",
@@ -57,6 +75,16 @@ const router = createBrowserRouter([
         element: <SingUpPage />,
       },
     ],
+  },
+  {
+    path: "/dashboard-admin",
+    element: <AdminDashboard />,
+    children:[
+      {
+        path:'/dashboard-admin-home',
+        element:<Layout/>,
+      }
+    ]
   },
 ]);
 
