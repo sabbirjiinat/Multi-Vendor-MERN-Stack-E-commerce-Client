@@ -14,6 +14,7 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
 
+
   const incrementCount = () => {
     setCount(count + 1);
   };
@@ -152,6 +153,7 @@ const ProductDetails = ({ data }) => {
         </div>
       ) : null}
     </div>
+ 
   );
 };
 

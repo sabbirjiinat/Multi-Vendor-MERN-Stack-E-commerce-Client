@@ -1,37 +1,22 @@
-import { useContext, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../style/style";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { RxAvatar } from "react-icons/rx";
+import { useState } from "react";
+("react-router-dom");
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TbFidgetSpinner } from "react-icons/tb";
 import Swal from "sweetalert2";
-import { AuthContext } from "../../provider/AuthProvider";
-import SaveUserToDb from "../../api/SaveUserToDB";
+import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import UseAuth from "../../hooks/UseAuth";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const ShopCreate= () => {
-  const [visible, setVisible] = useState(false);
-  const [avatar, setAvatar] = useState(null);
+const ShopCreate = () => {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
   const { register, handleSubmit } = useForm();
-  const { createUserWithEmail, updateUserProfile } = useContext(AuthContext);
-
-  const handleFileInputChange = (e) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  const [axiosSecure] = UseAxiosSecure();
+  const { user } = UseAuth();
 
   const onSubmit = (data) => {
     if (data.shopName.length === 0) {
@@ -56,17 +41,6 @@ const ShopCreate= () => {
         progress: undefined,
         theme: "light",
       });
-    } else if (data.email.length === 0) {
-      return toast.error("Email is required", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
     } else if (data.address.length === 0) {
       return toast.error("Address is required", {
         position: "bottom-right",
@@ -78,8 +52,7 @@ const ShopCreate= () => {
         progress: undefined,
         theme: "light",
       });
-    }
-    else if(data.zipCode.length === 0){
+    } else if (data.zipCode.length === 0) {
       return toast.error("Zip code is required", {
         position: "bottom-right",
         autoClose: 5000,
@@ -91,102 +64,20 @@ const ShopCreate= () => {
         theme: "light",
       });
     }
-    else if(data.password.length === 0){
-      return toast.error("Password is required", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-    else if(data.image.length === 0){
-      return toast.error("Image is required", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-    console.log(data.image[0].name);
 
-    const url = `https://api.imgbb.com/1/upload?key=${
-      import.meta.env.VITE_IMGBB_KEY
-    }`;
-    const formData = new FormData();
-    formData.append("image", data.image[0]);
     setLoader(true);
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((imageUrl) => {
-        console.log(imageUrl);
-        const image_url = imageUrl.data.display_url;
-        createUserWithEmail(data.email, data.password)
-          .then((result) => {
-            const signUpUser = result.user;
-            updateUserProfile(data.name, image_url)
-              .then(() => {
-                SaveUserToDb(signUpUser);
-                setLoader(false);
-                navigate(from, { replace: true });
-                Swal.fire({
-                  position: "center-center",
-                  icon: "success",
-                  title: "You have login successfully",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-              })
-              .catch((error) => {
-                setLoader(false);
-                toast.error(error.message, {
-                  position: "bottom-right",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                });
-              });
-          })
-          .catch((error) => {
-            setLoader(false);
-            toast.error(error.message, {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          });
-      })
-      .catch((error) => {
-        setLoader(false);
-        toast.error(error.message, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+    axiosSecure
+      .put(`/users/seller/${user?.email}`, { ...data })
+      .then((data) => {
+        if (data.data.modifiedCount > 0) {
+          Swal.fire(
+            "Success!",
+            `Thank you ${user.displayName} for your interest to be a seller on Shoppo.Your request is pending now.We will approve your request soon.keep your eye on Shoppo.`,
+            "success"
+          );
+          setLoader(false);
+          navigate(from, { replace: true });
+        }
       });
   };
 
@@ -205,7 +96,7 @@ const ShopCreate= () => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-               Shop Name
+                Shop Name
               </label>
               <div className="mt-1">
                 <input
@@ -221,7 +112,7 @@ const ShopCreate= () => {
                 htmlFor="number"
                 className="block text-sm font-medium text-gray-700"
               >
-              Phone Number
+                Phone Number
               </label>
               <div className="mt-1">
                 <input
@@ -233,23 +124,6 @@ const ShopCreate= () => {
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  {...register("email")}
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
             <div>
               <label
                 htmlFor="address"
@@ -271,7 +145,7 @@ const ShopCreate= () => {
                 htmlFor="zipCode"
                 className="block text-sm font-medium text-gray-700"
               >
-              Zip Code
+                Zip Code
               </label>
               <div className="mt-1">
                 <input
@@ -280,72 +154,6 @@ const ShopCreate= () => {
                   name="zipCode"
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  {...register("password")}
-                  type={visible ? "text" : "password"}
-                  name="password"
-                  autoComplete="current-password"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-                {visible ? (
-                  <AiOutlineEye
-                    className="absolute right-2 top-2 cursor-pointer"
-                    size={25}
-                    onClick={() => setVisible(false)}
-                  />
-                ) : (
-                  <AiOutlineEyeInvisible
-                    className="absolute right-2 top-2 cursor-pointer"
-                    size={25}
-                    onClick={() => setVisible(true)}
-                  />
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="avatar"
-                className="block text-sm font-medium text-gray-700"
-              ></label>
-              <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {avatar ? (
-                    <img
-                      src={avatar}
-                      alt="avatar"
-                      className="h-full w-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <RxAvatar className="h-8 w-8" />
-                  )}
-                </span>
-                <label
-                  htmlFor="file-input"
-                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
-                >
-                  <span>Upload a file</span>
-                  <input
-                    {...register("image")}
-                    onChange={handleFileInputChange}
-                    type="file"
-                    name="image"
-                    id="file-input"
-                    accept=".jpg,.jpeg,.png"
-                    className="sr-only"
-                  />
-                </label>
               </div>
             </div>
 
@@ -360,12 +168,6 @@ const ShopCreate= () => {
                   "Submit"
                 )}
               </button>
-            </div>
-            <div className={`${styles.noramlFlex} w-full`}>
-              <h4>Already have an account?</h4>
-              <Link to="/shop-login" className="text-blue-600 pl-2">
-                Sign In
-              </Link>
             </div>
           </form>
         </div>

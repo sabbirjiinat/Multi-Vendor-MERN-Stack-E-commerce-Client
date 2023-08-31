@@ -8,22 +8,22 @@ import {BiMessageSquareDetail} from 'react-icons/bi'
 const AdminDashboardNavbar = () => {
     const {user} = useContext(AuthContext)
     return (
-        <div className="w-full h-[80px] bg-white sticky top-0 left-0 z-30 flex items-center justify-between px-4">
+        <div className="w-full h-[70px] bg-[#3321cb] sticky top-0 left-0 z-30 flex items-center justify-between px-4">
             <div>
-            <Link to='/dashboard'>
+            <Link to='/'>
                 <img src="https://shopo.quomodothemes.website/assets/images/logo.svg" alt="" />
             </Link>
             </div>
             <div className="flex items-center">
                 <div className="flex items-center mr4">
                   <Link to='/dashboard/products'  className="hidden 800px:block">
-                <FiShoppingBag color='#555' size={30} className='mx-5 cursor-pointer'/>
+                <FiShoppingBag color='#fff' size={30} className='mx-5 cursor-pointer'/>
                   </Link>
                   <Link to='/dashboard/orders'  className="hidden 800px:block">
-                <FiPackage color='#555' size={30} className='mx-5 cursor-pointer'/>
+                <FiPackage color='#fff' size={30} className='mx-5 cursor-pointer'/>
                   </Link>
                   <Link to='/dashboard/messages'  className="hidden 800px:block">
-                <BiMessageSquareDetail color='#555' size={30} className='mx-5 cursor-pointer'/>
+                <BiMessageSquareDetail color='#fff' size={30} className='mx-5 cursor-pointer'/>
                   </Link>
                   {/* Todo seller id and image*/}
                   <Link to={`/shop/${'user'}`}>

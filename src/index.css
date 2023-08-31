@@ -47,3 +47,19 @@ input[type=number] {
 .banner-background{
   background-image: url("https://themes.rslahmed.dev/rafcart/assets/images/banner-2.jpg");
 }
+
+::-webkit-scrollbar{
+  width: 10px;
+  
+}
+
+::-webkit-scrollbar-track{
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #7b7b7b;
+  border: 5px solid transparent;
+  border-radius: 4px;
+
+}

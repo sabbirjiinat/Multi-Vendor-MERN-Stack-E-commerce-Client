@@ -53,11 +53,11 @@ const AuthProvider = ({ children }) => {
           .post("http://localhost:8000/jwt", { email: currentUser.email })
           .then((data) => {
             const token = data.data.token;
-            localStorage.setItem("token", token);
+            localStorage.setItem("access-token", token);
             setLoading(false);
           });
       } else {
-        localStorage.removeItem("token");
+        localStorage.removeItem("access-token");
         setLoading(false);
       }
     });

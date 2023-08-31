@@ -13,8 +13,9 @@ import ShopCreatePage from "../pages/ShopCreatePage/ShopCreatePage";
 import ShopDashboardPage from "../pages/Shop/ShopDashboardPage";
 import ShopHomePage from "../pages/Shop/ShopHomePage";
 import ShopCreateProduct from "../pages/Shop/ShopCreateProduct";
-import AdminDashboard from '../pages/Admin/AdminDashboard/AdminDashboard'
+import AllUsers from "../pages/Admin/MainContent/AllUser/AllUsers";
 import Layout from "../pages/Admin/Layout/Layout";
+import Dashboard from "../pages/Admin/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -34,8 +35,9 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       {
-        path: "/product/:name",
+        path: "/product/:id",
         element: <ProductDetailPage />,
+        loader:({params})=>fetch(`http://localhost:8000/products/${params.id}`)
       },
       {
         path: "/events",
@@ -78,11 +80,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard-admin",
-    element: <AdminDashboard />,
+    element: <Layout />,
     children:[
       {
-        path:'/dashboard-admin-home',
-        element:<Layout/>,
+        path:'/dashboard-admin/home',
+        element:<Dashboard/>,
+      },
+      {
+        path:'/dashboard-admin/users',
+        element:<AllUsers/>,
       }
     ]
   },

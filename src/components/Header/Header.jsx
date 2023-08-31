@@ -16,6 +16,8 @@ import Cart from "../Cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { AuthContext } from "../../provider/AuthProvider";
 import { RxCross1 } from "react-icons/rx";
+import UseAdmin from "../../hooks/UseAdmin";
+import UseSeller from "../../hooks/UseSeller";
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -25,8 +27,11 @@ const Header = () => {
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
   const { user } = useContext(AuthContext);
-  // const seller = true;
-  const isAdmin = true
+  const [isAdmin] = UseAdmin();
+  const [isSeller] = UseSeller();
+ 
+
+
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -93,41 +98,42 @@ const Header = () => {
             ) : null}
           </div>
           {/* Todo seller authenticate */}
-          {/* { seller ? (
-             <div className={`${styles.button}`}>
-             <Link to="/dashboard">
-               <h1 className="text-[#fff] flex items-center">
-                 Dashboard
-                 <IoIosArrowForward className="ml-1" />
-               </h1>
-             </Link>
-           </div>
-          ) : (
+          {!isSeller && !isAdmin && (
+              <div className={`${styles.button}`}>
+                <Link to="/shop-create">
+                  <h1 className="text-[#fff] flex items-center">
+                    Become Seller
+                    <IoIosArrowForward className="ml-1" />
+                  </h1>
+                </Link>
+              </div>
+            )}
+          {isSeller &&  (
             <div className={`${styles.button}`}>
-              <Link to="/shop-create">
+              <Link to="/dashboard">
                 <h1 className="text-[#fff] flex items-center">
-                  Become Seller
+                  Dashboard
                   <IoIosArrowForward className="ml-1" />
                 </h1>
               </Link>
             </div>
-          )} */}
+          )}
           {isAdmin && (
-             <div className={`${styles.button}`}>
-             <Link to="/dashboard-admin">
-               <h1 className="text-[#fff] flex items-center">
-                 Dashboard
-                 <IoIosArrowForward className="ml-1" />
-               </h1>
-             </Link>
-           </div>
+            <div className={`${styles.button}`}>
+              <Link to="/dashboard-admin/home">
+                <h1 className="text-[#fff] flex items-center">
+                  Dashboard
+                  <IoIosArrowForward className="ml-1" />
+                </h1>
+              </Link>
+            </div>
           )}
         </div>
       </div>
       {/* Todo for overflow content */}
       <div
         className={`${
-          active === true ? "shadow-sm fixed top-0 left-0" : null
+          active === true ? "z-50 shadow-sm fixed top-0 left-0" : null
         } transition hidden 800px:flex items-center justify-between w-full bg-[#3321cb] h-[70px]`}
       >
         <div

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import styles from "../../style/style";
 import ProductCard from "../Route/ProductCard/ProductCard";
-import { productData } from "../../static/data";
+import UseAllProducts from "../../hooks/UseAllProducts";
+
 
 const BestDeals = () => {
+  const [products] = UseAllProducts()
   const [data, setData] = useState([]);
   useEffect(() => {
     const d =
-      productData && productData.sort((a, b) => b.total_sell - a.total_sell);
+    products && products.sort((a, b) => b.total_sell - a.total_sell);
     const firstFive = d.slice(0, 5);
     setData(firstFive);
-  }, []);
+  }, [products]);
 
   return (
     <div>

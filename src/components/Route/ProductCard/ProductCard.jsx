@@ -7,13 +7,12 @@ import ProductDetailCard from "./ProductDetailCard";
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-  const d = data.name;
-  const product_name = d.replace(/\s+/g, "-");
+
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/product/${product_name}`}>
+        <Link to={`/product/${data._id}`}>
           <img
             src={data.image_Url[0].url}
             alt=""
@@ -23,7 +22,7 @@ const ProductCard = ({ data }) => {
         <Link to="/">
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
-        <Link to={`/product/${product_name}`}>
+        <Link to={`/product/${data._id}`}>
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>

@@ -1,15 +1,15 @@
-import { useState } from "react";
 import AdminDashboardNavbar from "../Layout/AdminDashboardNavbar";
 import AdminDashboardSidebar from "../Layout/AdminDashboardSidebar";
+import { Outlet } from "react-router-dom";
 const Layout = () => {
-    const [active] = useState(1)
   return (
     <div>
       <AdminDashboardNavbar />
-      <div className="flex items-center justify-between w-full">
-        <div className="w-[80px] 800px:w-[220px]">
-          <AdminDashboardSidebar active={active} />
+      <div className="flex">
+        <div className="w-[80px] 800px:w-[240px]">
+          <AdminDashboardSidebar />
         </div>
+        <Outlet />
       </div>
     </div>
   );
