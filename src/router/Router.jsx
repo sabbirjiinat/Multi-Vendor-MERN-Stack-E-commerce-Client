@@ -16,6 +16,7 @@ import ShopCreateProduct from "../pages/Shop/ShopCreateProduct";
 import AllUsers from "../pages/Admin/MainContent/AllUser/AllUsers";
 import Layout from "../pages/Admin/Layout/Layout";
 import Dashboard from "../pages/Admin/Dashboard";
+import CategoriesProducts from "../pages/CategoriesProducts/CategoriesProducts";
 
 const router = createBrowserRouter([
   {
@@ -31,13 +32,17 @@ const router = createBrowserRouter([
         element: <BestSellingPage />,
       },
       {
-        path: "/products",
+        path: "/allProducts",
         element: <Products />,
+      },
+      {
+        path: "/products",
+        element: <CategoriesProducts/>,
       },
       {
         path: "/product/:id",
         element: <ProductDetailPage />,
-        loader:({params})=>fetch(`http://localhost:8000/products/${params.id}`)
+        loader:({params})=>fetch(`https://multivendor-e-commerce-web-server.vercel.app/allProducts/${params.id}`)
       },
       {
         path: "/events",

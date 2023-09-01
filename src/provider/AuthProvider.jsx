@@ -16,6 +16,7 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [category,setCategory] = useState('')
   const GoogleProvider = new GoogleAuthProvider();
 
   const createUserWithEmail = (email, password) => {
@@ -50,7 +51,7 @@ const AuthProvider = ({ children }) => {
       setUser(currentUser);
       if (currentUser && currentUser.email) {
         axios
-          .post("http://localhost:8000/jwt", { email: currentUser.email })
+          .post("https://multivendor-e-commerce-web-server.vercel.app/jwt", { email: currentUser.email })
           .then((data) => {
             const token = data.data.token;
             localStorage.setItem("access-token", token);
@@ -58,7 +59,7 @@ const AuthProvider = ({ children }) => {
           });
       } else {
         localStorage.removeItem("access-token");
-        setLoading(false);
+        setLoading(true);
       }
     });
     return () => {
@@ -76,6 +77,8 @@ const AuthProvider = ({ children }) => {
     googleLogin,
     logOut,
     updateUserProfile,
+    category,
+    setCategory
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

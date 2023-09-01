@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import styles from "../../style/style";
 import { Link } from "react-router-dom";
-import { productData, categoriesData } from "../../static/data.js";
+import { productData } from "../../static/data.js";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -18,6 +18,8 @@ import { AuthContext } from "../../provider/AuthProvider";
 import { RxCross1 } from "react-icons/rx";
 import UseAdmin from "../../hooks/UseAdmin";
 import UseSeller from "../../hooks/UseSeller";
+import UseCategory from "../../hooks/UseCategory";
+import UseAllWishlist from "../../hooks/UseAllWishlist";
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -26,12 +28,11 @@ const Header = () => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
+  const [categoriesData] = UseCategory();
   const { user } = useContext(AuthContext);
   const [isAdmin] = UseAdmin();
   const [isSeller] = UseSeller();
- 
-
-
+  const [wishlistProducts] = UseAllWishlist()
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -56,7 +57,7 @@ const Header = () => {
       <div className={`${styles.section}`}>
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
-            <Link>
+            <Link to='/'>
               <img
                 src="https://shopo.quomodothemes.website/assets/images/logo.svg"
                 alt=""
@@ -99,16 +100,16 @@ const Header = () => {
           </div>
           {/* Todo seller authenticate */}
           {!isSeller && !isAdmin && (
-              <div className={`${styles.button}`}>
-                <Link to="/shop-create">
-                  <h1 className="text-[#fff] flex items-center">
-                    Become Seller
-                    <IoIosArrowForward className="ml-1" />
-                  </h1>
-                </Link>
-              </div>
-            )}
-          {isSeller &&  (
+            <div className={`${styles.button}`}>
+              <Link to="/shop-create">
+                <h1 className="text-[#fff] flex items-center">
+                  Become Seller
+                  <IoIosArrowForward className="ml-1" />
+                </h1>
+              </Link>
+            </div>
+          )}
+          {isSeller && (
             <div className={`${styles.button}`}>
               <Link to="/dashboard">
                 <h1 className="text-[#fff] flex items-center">
@@ -130,7 +131,7 @@ const Header = () => {
           )}
         </div>
       </div>
-      {/* Todo for overflow content */}
+
       <div
         className={`${
           active === true ? "z-50 shadow-sm fixed top-0 left-0" : null
@@ -148,10 +149,18 @@ const Header = () => {
               >
                 All Categories
               </button>
-              <IoIosArrowDown
-                size={20}
-                className="absolute right-2 top-4 cursor-pointer"
-              />
+              {dropDown ? (
+                <RxCross1
+                  size={20}
+                  className="absolute right-2 top-4 cursor-pointer"
+                />
+              ) : (
+                <IoIosArrowDown
+                  size={20}
+                  className="absolute right-2 top-4 cursor-pointer"
+                />
+              )}
+
               {dropDown ? (
                 <DropDown
                   categoriesData={categoriesData}
@@ -173,7 +182,7 @@ const Header = () => {
               >
                 <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                  0
+              {wishlistProducts.length}
                 </span>
               </div>
             </div>
@@ -227,7 +236,7 @@ const Header = () => {
           <div>
             <BiMenuAltLeft
               size={40}
-              className="ml-4"
+              className="ml-4 cursor-pointer"
               onClick={() => setOpen(true)}
             />
           </div>
@@ -239,10 +248,10 @@ const Header = () => {
               />
             </Link>
           </div>
-          <div>
+          <div className="cursor-pointer">
             <div className="relative mr-[20px]">
               <AiOutlineShoppingCart size={30} />
-              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center cursor-pointer">
                 0
               </span>
             </div>
@@ -257,7 +266,7 @@ const Header = () => {
                   <div className="relative mr-[15px]">
                     <AiOutlineHeart size={30} className="mt-5 ml-2" />
                     <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                      0
+                    {wishlistProducts.length}
                     </span>
                   </div>
                 </div>

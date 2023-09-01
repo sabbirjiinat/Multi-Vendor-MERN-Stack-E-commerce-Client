@@ -1,12 +1,73 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../../style/style";
-import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from "react-icons/ai";
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
+import {
+  AiFillHeart,
+  AiOutlineEye,
+  AiOutlineHeart,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
 import ProductDetailCard from "./ProductDetailCard";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import UseAuth from "../../../hooks/UseAuth";
+import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
+import UseAllWishlist from "../../../hooks/UseAllWishlist";
 
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = UseAuth();
+  const navigate = useNavigate();
+  const [axiosSecure] = UseAxiosSecure();
+  const [, refetch] = UseAllWishlist();
+
+  const handleWishlist = (item) => {
+    console.log(item);
+    if (!user) {
+      Swal.fire({
+        title: "You need to login first for wishlist!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3321cb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, get me there!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    } else {
+      const { description, name, price } = item;
+      const wishlistProduct = {
+        description,
+        name,
+        price,
+        image: item.image_Url[0].url,
+        email: user?.email,
+        wishListId: item._id,
+      };
+
+      axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
+        if (data.data.insertedId) {
+          refetch();
+          toast.success(`This product is now in your wishlist`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    }
+  };
 
   return (
     <>
@@ -28,31 +89,7 @@ const ProductCard = ({ data }) => {
           </h4>
         </Link>
         <div className="flex">
-          <AiFillStar
-            className="mr-2 cursor-pointer"
-            color="#F6BA00"
-            size={20}
-          />
-          <AiFillStar
-            className="mr-2 cursor-pointer"
-            color="#F6BA00"
-            size={20}
-          />
-          <AiFillStar
-            className="mr-2 cursor-pointer"
-            color="#F6BA00"
-            size={20}
-          />
-          <AiFillStar
-            className="mr-2 cursor-pointer"
-            color="#F6BA00"
-            size={20}
-          />
-          <AiOutlineStar
-            className="mr-2 cursor-pointer"
-            color="#F6BA00"
-            size={20}
-          />
+          <Rating style={{ maxWidth: 100 }} value={data.rating} readOnly />
         </div>
         <div className="py-2 flex items-center justify-between">
           <div className="flex">
@@ -69,6 +106,7 @@ const ProductCard = ({ data }) => {
         </div>
         {/* Side options */}
         <div>
+          {/* TODO: after wishlist the heart will be red */}
           {click ? (
             <AiFillHeart
               size={22}
@@ -81,13 +119,16 @@ const ProductCard = ({ data }) => {
             <AiOutlineHeart
               size={22}
               className="cursor-pointer absolute right-2 top-5"
-              onClick={() => setClick(!click)}
+              onClick={() => {
+                handleWishlist(data);
+                setClick(!click);
+              }}
               color={click ? "red" : "#333"}
               title="Add to wishlist"
             />
           )}
           <AiOutlineEye
-               size={22}
+            size={22}
             className="cursor-pointer absolute right-2 top-14"
             onClick={() => setOpen(!open)}
             color="#333"
@@ -100,13 +141,20 @@ const ProductCard = ({ data }) => {
             color="#444"
             title="Add to cart"
           />
-          {
-            open ? <ProductDetailCard
-            setOpen={setOpen}
-            data={data}
-            />: null
-          }
+          {open ? <ProductDetailCard setOpen={setOpen} data={data} /> : null}
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </>
   );

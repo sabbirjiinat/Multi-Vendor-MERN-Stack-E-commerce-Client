@@ -1,21 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../../style/style";
+import UseAuth from "../../hooks/UseAuth";
 
 const DropDown = ({ setDropDown, categoriesData }) => {
+  const { setCategory } = UseAuth();
   const navigate = useNavigate();
+
   const handleSubmit = (i) => {
-    navigate(`/products?category=${i.id}`);
+    setCategory(i.title);
+    navigate(`/products?category=${i.title}`);
+
     setDropDown(false);
-    window.location.reload();
   };
+
   return (
-    <div className="pb-4 w-[270px] bg-[#ffff] absolute z-30 rounded-b-md shadow-sm">
+    <div className="pb-4 w-[270px] bg-[#ffff]  z-10 rounded-b-md shadow-sm overflow-y-scroll h-[60vh] fixed">
       {categoriesData &&
         categoriesData.map((i, index) => (
           <div
             key={index}
-            className={`${styles.noramlFlex}`}
             onClick={() => handleSubmit(i)}
+            className={`${styles.noramlFlex}`}
           >
             <img
               style={{

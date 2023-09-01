@@ -5,7 +5,7 @@ import styles from "../../style/style";
 const Hero = () => {
   return (
     <div
-      className={`banner-background min-h-[70vh] 800px:min-h-[80vh] w-full bg-no-repeat bg-contain ${styles.noramlFlex}`}
+      className={`banner-background min-h-[70vh] 800px:min-h-[80vh] w-full bg-no-repeat bg-cover ${styles.noramlFlex}`}
  
     >
       <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>

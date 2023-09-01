@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const EmptyStates = ({ title, linkTitle, to }) => {
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center">
+    <div className="w-full h-screen flex flex-col justify-start items-center">
       <h1 className="font-Roboto text-4xl text-gray-800 font-semibold">
         {title}
       </h1>

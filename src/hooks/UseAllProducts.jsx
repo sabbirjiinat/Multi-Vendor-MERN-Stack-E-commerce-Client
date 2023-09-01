@@ -7,13 +7,15 @@ const UseAllProducts = () => {
     queryKey: ["products"],
     queryFn: async () => {
       setLoader(true);
-      const res = await axios.get("http://localhost:8000/products");
+      const res = await axios.get(
+        `https://multivendor-e-commerce-web-server.vercel.app/allProducts`
+      );
       setLoader(false);
       const data = res.data;
       return data;
     },
   });
-  return [products, refetch,loader];
+  return [products, refetch, loader];
 };
 
 export default UseAllProducts;
