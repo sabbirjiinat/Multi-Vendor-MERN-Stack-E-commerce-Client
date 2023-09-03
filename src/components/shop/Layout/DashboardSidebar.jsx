@@ -9,15 +9,15 @@ import { BiMessageSquareDetail } from "react-icons/bi";
 import { HiOutlineReceiptRefund } from "react-icons/hi";
 const DashboardSidebar = () => {
   return (
-    <div className="w-full h-[89vh] bg-[#3321cb] shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
+    <div className="w-full h-[89vh] bg-gray-200 shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
       {/* Single item */}
 
       <NavLink
-        to="/dashboard"
+        to="/dashboard-seller"
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <RxDashboard size={30} />
@@ -27,11 +27,11 @@ const DashboardSidebar = () => {
       </NavLink>
 
       <NavLink
-        to="/dashboard-orders"
+        to="/dashboard-seller/orders"
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <FiPackage size={30} />
@@ -45,7 +45,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <FiShoppingBag size={30} />
@@ -55,11 +55,11 @@ const DashboardSidebar = () => {
       </NavLink>
 
       <NavLink
-        to="/dashboard-create-product"
+        to="/dashboard-seller/create-product"
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <AiOutlineFolderAdd size={30} />
@@ -73,7 +73,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <MdOutlineLocalOffer size={30} />
@@ -87,7 +87,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <VscNewFile size={30} />
@@ -98,7 +98,7 @@ const DashboardSidebar = () => {
 
       <NavLink
         to="/dashboard-withdraw-money"
-        className={({isActive})=> `${isActive ? 'text-[#17dd1f]':''}w-full flex items-center p-4 text-white`}
+        className={({isActive})=> `${isActive ? 'text-[#17dd1f]':''}w-full flex items-center p-4 text-[#555]`}
       >
         <CiMoneyBill size={30} />
         <h5 className={`hidden 800px:block pl-2 text-[18px] font-[400] `}>
@@ -111,7 +111,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <BiMessageSquareDetail size={30} />
@@ -125,7 +125,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <AiOutlineGift size={30} />
@@ -139,7 +139,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <HiOutlineReceiptRefund size={30} />
@@ -153,7 +153,7 @@ const DashboardSidebar = () => {
         className={({ isActive }) =>
           `${
             isActive ? "text-[#17dd1f]" : ""
-          }w-full flex items-center p-4 text-white`
+          }w-full flex items-center p-4 text-[#555]`
         }
       >
         <CiSettings size={30} />

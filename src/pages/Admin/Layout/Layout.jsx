@@ -6,7 +6,7 @@ const Layout = () => {
     <div>
       <AdminDashboardNavbar />
       <div className="flex">
-        <div className="w-[80px] 800px:w-[240px]">
+        <div className="w-[80px] 800px:w-[290px]">
           <AdminDashboardSidebar />
         </div>
         <Outlet />

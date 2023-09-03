@@ -7,13 +7,23 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import UseAuth from "../../hooks/UseAuth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import UseAllWishlist from "../../hooks/UseAllWishlist";
+import UseCartData from "../../hooks/UseCartData";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
-  const [select, setSelect] = useState(0);
+  // const [select, setSelect] = useState(0);
   const navigate = useNavigate();
-
+  const { user } = UseAuth();
+  const [axiosSecure] = UseAxiosSecure();
+  const [, refetch] = UseAllWishlist();
+  const [, cartDataRefetch] = UseCartData();
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -25,8 +35,103 @@ const ProductDetails = ({ data }) => {
     }
   };
 
+  const totalPrice = data.discount_price
+    ? data.discount_price * count
+    : data.price * count;
+
+  /* Handle add to wishlist */
+  const addToWishlist = (item) => {
+    console.log(item);
+    if (!user) {
+      Swal.fire({
+        title: "You need to login first for wishlist!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3321cb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, get me there!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    } else {
+      const { description, name } = item;
+      const wishlistProduct = {
+        description,
+        name,
+        price: parseFloat(totalPrice),
+        image: item.image_Url[0].url,
+        email: user?.email,
+        wishListId: item._id,
+      };
+
+      axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
+        if (data.data.insertedId) {
+          refetch();
+
+          toast.success(`This product is now in your wishlist`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    }
+  };
+
+  /* Handle add to cart */
+  const handleAddToCart = (item) => {
+    console.log(item);
+    if (!user) {
+      Swal.fire({
+        title: "You need to login first for add to cart!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3321cb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, get me there!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    } else {
+      const { description, name } = item;
+      const addToCartProduct = {
+        description,
+        name,
+        price: parseFloat(totalPrice),
+        image: item.image_Url[0].url,
+        email: user?.email,
+        addToCartId: item._id,
+      };
+
+      axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
+        if (data.data.insertedId) {
+          cartDataRefetch();
+          toast.success(`This product is now in your cart`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    }
+  };
+
   const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=3457589gh57589e5ht8754598u55");
+    navigate("");
   };
   return (
     <div className="bg-white">
@@ -36,43 +141,47 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  className="w-[80%]"
-                  src={data.image_Url[select].url}
+                  className="w-[80%] "
+                  src={data.image_Url[0].url}
                   alt=""
                 />
-                <div className="w-full flex">
+               {/* <div className="w-full flex">
                   <div
                     className={`${
-                      select === 0 ? "border" : "null"
-                    } cursor-pointer`}
+                   select === 0 ? "border" : "null"
+                   } cursor-pointer`}
                   >
-                    <img
+                 <img
                       className="h-[200px]"
                       onClick={() => setSelect(0)}
                       src={data && data.image_Url[0].url}
                       alt=""
-                    />
+                    /> 
                   </div>
-                  <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer`}
+                   <div
+                     className={`${
+                       select === 1 ? "border" : "null"
+                 } cursor-pointer`}
                   >
-                    <img
+                     <img
                       className="h-[200px]"
-                      onClick={() => setSelect(1)}
-                      src={data && data.image_Url[1].url}
+                      // onClick={() => setSelect(1)}
+                      src={
+                        data && data.image_Url[1]?.url
+                          ? data.image_Url[1].url
+                          : data.image_Url[0].url
+                      }
                       alt=""
-                    />
-                  </div>
-                </div>
+                    /> 
+                   </div> 
+                </div> */}
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discount_price}$
+                    {totalPrice}$
                   </h4>
                   <h3 className={`${styles.price}`}>
                     {data.price ? data.price + "$" : null}
@@ -109,7 +218,10 @@ const ProductDetails = ({ data }) => {
                       <AiOutlineHeart
                         size={22}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => {
+                          addToWishlist(data);
+                          setClick(!click);
+                        }}
                         color={click ? "red" : "#333"}
                         title="Add to wishlist"
                       />
@@ -117,6 +229,7 @@ const ProductDetails = ({ data }) => {
                   </div>
                 </div>
                 <div
+                  onClick={() => handleAddToCart(data)}
                   className={`${styles.button} !mt-6 !rounded !h-11 flex justify-center`}
                 >
                   <span className="text-white flex items-center">
@@ -153,7 +266,6 @@ const ProductDetails = ({ data }) => {
         </div>
       ) : null}
     </div>
- 
   );
 };
 
@@ -264,6 +376,18 @@ const ProductDetailsInfo = ({ data }) => {
               </Link>
             </div>
           </div>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
       ) : null}
     </div>

@@ -44,7 +44,7 @@ const ShopProfileData = () => {
           <div>
             {user && (
               <div>
-                <Link to="/dashboard">
+                <Link to="/dashboard-seller">
                   <div className={`${styles.button} !rounded-[4px] h-[42px]`}>
                     <span className="text-[#fff]">Go Dashboard</span>
                   </div>

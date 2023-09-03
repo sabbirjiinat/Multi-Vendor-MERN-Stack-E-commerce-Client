@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import styles from "../../style/style";
 import { Link } from "react-router-dom";
-import { productData } from "../../static/data.js";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -20,6 +19,8 @@ import UseAdmin from "../../hooks/UseAdmin";
 import UseSeller from "../../hooks/UseSeller";
 import UseCategory from "../../hooks/UseCategory";
 import UseAllWishlist from "../../hooks/UseAllWishlist";
+import UseCartData from "../../hooks/UseCartData";
+import UseAllProducts from "../../hooks/UseAllProducts";
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -32,14 +33,15 @@ const Header = () => {
   const { user } = useContext(AuthContext);
   const [isAdmin] = UseAdmin();
   const [isSeller] = UseSeller();
-  const [wishlistProducts] = UseAllWishlist()
-
+  const [wishlistProducts] = UseAllWishlist();
+  const [addToCartProducts] = UseCartData();
+  const [products] = UseAllProducts();
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
     const filteredProduct =
-      productData &&
-      productData.filter((product) =>
+      products &&
+      products.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filteredProduct);
@@ -57,7 +59,7 @@ const Header = () => {
       <div className={`${styles.section}`}>
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
-            <Link to='/'>
+            <Link to="/">
               <img
                 src="https://shopo.quomodothemes.website/assets/images/logo.svg"
                 alt=""
@@ -80,10 +82,10 @@ const Header = () => {
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
-                    const d = i.name;
-                    const product_name = d.replace(/\s+/g, "-");
                     return (
-                      <Link key={index} to={`/product/${product_name}`}>
+                      <Link key={index} to={`/product/${i._id}`}
+                     
+                      >
                         <div className="w-full flex items-start py-3">
                           <img
                             src={i?.image_Url[0]?.url}
@@ -98,36 +100,36 @@ const Header = () => {
               </div>
             ) : null}
           </div>
-          {/* Todo seller authenticate */}
+
           {!isSeller && !isAdmin && (
-            <div className={`${styles.button}`}>
-              <Link to="/shop-create">
+            <Link to="/shop-create">
+              <div className={`${styles.button}`}>
                 <h1 className="text-[#fff] flex items-center">
                   Become Seller
                   <IoIosArrowForward className="ml-1" />
                 </h1>
-              </Link>
-            </div>
+              </div>
+            </Link>
           )}
           {isSeller && (
-            <div className={`${styles.button}`}>
-              <Link to="/dashboard">
+            <Link to="/dashboard-seller">
+              <div className={`${styles.button}`}>
                 <h1 className="text-[#fff] flex items-center">
                   Dashboard
                   <IoIosArrowForward className="ml-1" />
                 </h1>
-              </Link>
-            </div>
+              </div>
+            </Link>
           )}
           {isAdmin && (
-            <div className={`${styles.button}`}>
-              <Link to="/dashboard-admin/home">
+            <Link to="/dashboard-admin/home">
+              <div className={`${styles.button}`}>
                 <h1 className="text-[#fff] flex items-center">
                   Dashboard
                   <IoIosArrowForward className="ml-1" />
                 </h1>
-              </Link>
-            </div>
+              </div>
+            </Link>
           )}
         </div>
       </div>
@@ -182,7 +184,7 @@ const Header = () => {
               >
                 <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-              {wishlistProducts.length}
+                  {wishlistProducts.length}
                 </span>
               </div>
             </div>
@@ -196,7 +198,7 @@ const Header = () => {
                   color="rgb(255 255 255 / 83%)"
                 />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                  1
+                  {addToCartProducts.length}
                 </span>
               </div>
             </div>
@@ -206,7 +208,7 @@ const Header = () => {
                 {user ? (
                   <Link to="/profile  ">
                     <img
-                      className="h8 w-8 rounded-full "
+                      className="h-8 w-8 rounded-full"
                       src={user.photoURL}
                       alt=""
                     />
@@ -266,7 +268,7 @@ const Header = () => {
                   <div className="relative mr-[15px]">
                     <AiOutlineHeart size={30} className="mt-5 ml-2" />
                     <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                    {wishlistProducts.length}
+                      {wishlistProducts.length}
                     </span>
                   </div>
                 </div>

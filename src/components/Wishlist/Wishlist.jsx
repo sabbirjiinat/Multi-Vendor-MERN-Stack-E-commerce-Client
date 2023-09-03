@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import UseAllWishlist from "../../hooks/UseAllWishlist";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import UseCartData from "../../hooks/UseCartData";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const [wishlistProducts] = UseAllWishlist();
@@ -42,6 +43,7 @@ const Wishlist = ({ setOpenWishlist }) => {
 };
 
 const CartSingle = ({ data }) => {
+  const [, cartDataRefetch] = UseCartData();
   const [value] = useState(1);
   const totalPrice = data.price * value;
   const [axiosSecure] = UseAxiosSecure();
@@ -55,20 +57,23 @@ const CartSingle = ({ data }) => {
   };
 
   const handleAddToCart = (addToCartData) => {
-    const { description, name, price, image, email } = addToCartData;
+    const { description, name, price, image, email, discount_price } =
+      addToCartData;
     const addToCartProduct = {
       addToCartId: addToCartData.wishListId,
       description,
       name,
-      price,
+      price: parseFloat(price),
       image,
       email,
+      discount_price: parseFloat(discount_price),
     };
     axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
       if (data.data.insertedId) {
         axiosSecure.delete(`/wishlist/${addToCartData._id}`).then((data) => {
           if (data.data.deletedCount > 0) {
             refetch();
+            cartDataRefetch();
           }
         });
       }
@@ -91,7 +96,7 @@ const CartSingle = ({ data }) => {
         <div className="pl-[5px]">
           <h1>{data.name.slice(0, 40)}...</h1>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-            US${totalPrice}
+            US${data.discount_price ? data.discount_price : totalPrice}
           </h4>
         </div>
 

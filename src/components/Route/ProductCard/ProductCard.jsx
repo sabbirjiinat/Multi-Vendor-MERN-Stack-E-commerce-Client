@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import UseAuth from "../../../hooks/UseAuth";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import UseAllWishlist from "../../../hooks/UseAllWishlist";
+import UseCartData from "../../../hooks/UseCartData";
 
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
@@ -24,9 +25,10 @@ const ProductCard = ({ data }) => {
   const navigate = useNavigate();
   const [axiosSecure] = UseAxiosSecure();
   const [, refetch] = UseAllWishlist();
+  const [, cartDataRefetch]= UseCartData()
 
   const handleWishlist = (item) => {
-    console.log(item);
+   
     if (!user) {
       Swal.fire({
         title: "You need to login first for wishlist!",
@@ -41,14 +43,15 @@ const ProductCard = ({ data }) => {
         }
       });
     } else {
-      const { description, name, price } = item;
+      const { description, name, price, discount_price } = item;
       const wishlistProduct = {
         description,
         name,
-        price,
+        price:parseFloat(price),
         image: item.image_Url[0].url,
         email: user?.email,
         wishListId: item._id,
+        discount_price:parseFloat(discount_price),
       };
 
       axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
@@ -68,6 +71,52 @@ const ProductCard = ({ data }) => {
       });
     }
   };
+
+
+  const handleAddToCart = (item) =>{
+    console.log(item);
+    if (!user) {
+      Swal.fire({
+        title: "You need to login first for add to cart!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3321cb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, get me there!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    } else {
+      const { description, name, price, discount_price } = item;
+      const addToCartProduct = {
+        description,
+        name,
+        price:parseFloat(price),
+        image: item.image_Url[0].url,
+        email: user?.email,
+        addToCartId: item._id,
+        discount_price: parseFloat(discount_price),
+      };
+
+      axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
+        if (data.data.insertedId) {
+          cartDataRefetch()
+          toast.success(`This product is now in your cart`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    }
+  }
 
   return (
     <>
@@ -101,7 +150,7 @@ const ProductCard = ({ data }) => {
             </h4>
           </div>
           <span className="font-[400] text-[17px] text-[#68d284]">
-            {data.total_sell} sold
+            {data.total_sell ? data.total_sell:''} sold
           </span>
         </div>
         {/* Side options */}
@@ -137,7 +186,7 @@ const ProductCard = ({ data }) => {
           <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
-            onClick={() => setOpen(!open)}
+            onClick={() => handleAddToCart(data)}
             color="#444"
             title="Add to cart"
           />

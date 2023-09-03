@@ -7,14 +7,14 @@ import { CiSettings } from "react-icons/ci";
 
 const AdminDashboardSidebar = () => {
   return (
-    <div className="w-full h-[89vh] bg-[#3321cb] shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
+    <div className="w-full h-[89vh] bg-gray-200 shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
       {/* Single item */}
 
       <NavLink
         to="/dashboard-admin/home"
         className={({ isActive }) =>
           `${
-            isActive ? "text-[#17dd1f]" : "text-white"
+            isActive ? "text-[#17dd1f]" : "text-[#555]"
           } w-full flex items-center p-4 `
         }
       >
@@ -28,7 +28,7 @@ const AdminDashboardSidebar = () => {
         to="/dashboard-admin/users"
         className={({ isActive }) =>
           `${
-            isActive ? "text-[#17dd1f]" : "text-white"
+            isActive ? "text-[#17dd1f]" : "text-[#555]"
           } w-full flex items-center p-4 `
         }
       >
@@ -39,16 +39,16 @@ const AdminDashboardSidebar = () => {
       </NavLink>
 
       <NavLink
-        to="/dashboard-admin-orders"
+        to="/dashboard-admin/pending-products"
         className={({ isActive }) =>
         `${
-          isActive ? "text-[#17dd1f]" : "text-white"
+          isActive ? "text-[#17dd1f]" : "text-[#555]"
         } w-full flex items-center p-4 `
       }
       >
         <FiShoppingBag size={30} />
         <h5 className={`hidden 800px:block pl-2 text-[18px] font-[400]`}>
-          All Products
+          Pending Products
         </h5>
       </NavLink>
 
@@ -56,7 +56,7 @@ const AdminDashboardSidebar = () => {
         to="/dashboard-admin-messages"
         className={({ isActive }) =>
         `${
-          isActive ? "text-[#17dd1f]" : "text-white"
+          isActive ? "text-[#17dd1f]" : "text-[#555]"
         } w-full flex items-center p-4 `
       }
       >
@@ -70,7 +70,7 @@ const AdminDashboardSidebar = () => {
         to="/dashboard-admin-settings"
         className={({ isActive }) =>
           `${
-            isActive ? "text-[#17dd1f]" : "text-white"
+            isActive ? "text-[#17dd1f]" : "text-[#555]"
           } w-full flex items-center p-4 `
         }
       >

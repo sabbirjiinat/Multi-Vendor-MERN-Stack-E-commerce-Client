@@ -4,16 +4,16 @@ import UseAxiosSecure from "./UseAxiosSecure";
 const UseCartData = () => {
   const { user } = UseAuth();
   const [axiosSecure] = UseAxiosSecure();
-  const { data: addToCartProducts = [], refetch } = useQuery({
+  const { data: addToCartProducts = [], refetch:cartDataRefetch } = useQuery({
     queryKey: ["addToCart", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `http://localhost:8000/addToCart/${user?.email}`
+        `/addToCart/${user?.email}`
       );
       return res.data;
     },
   });
-  return [addToCartProducts, refetch];
+  return [addToCartProducts, cartDataRefetch];
 };
 
 export default UseCartData;

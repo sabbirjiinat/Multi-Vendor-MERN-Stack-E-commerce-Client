@@ -8,7 +8,7 @@ const UseAllProducts = () => {
     queryFn: async () => {
       setLoader(true);
       const res = await axios.get(
-        `https://multivendor-e-commerce-web-server.vercel.app/allProducts`
+        `http://localhost:8000/allProducts?status=approve`
       );
       setLoader(false);
       const data = res.data;

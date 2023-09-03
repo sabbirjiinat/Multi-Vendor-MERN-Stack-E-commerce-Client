@@ -17,11 +17,14 @@ import AllUsers from "../pages/Admin/MainContent/AllUser/AllUsers";
 import Layout from "../pages/Admin/Layout/Layout";
 import Dashboard from "../pages/Admin/Dashboard";
 import CategoriesProducts from "../pages/CategoriesProducts/CategoriesProducts";
+import Checkout from "../pages/Checkout/Checkout";
+import Inbox from '../pages/Inbox/Inbox'
+import PendingProducts from '../pages/Admin/MainContent/PendingProducts/PendingProducts'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Element: <Main />,
+    element: <Main />,
     children: [
       {
         path: "/",
@@ -37,12 +40,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/products",
-        element: <CategoriesProducts/>,
+        element: <CategoriesProducts />,
       },
       {
         path: "/product/:id",
         element: <ProductDetailPage />,
-        loader:({params})=>fetch(`https://multivendor-e-commerce-web-server.vercel.app/allProducts/${params.id}`)
+        loader: ({ params }) =>
+          fetch(
+            `https://multivendor-e-commerce-web-server.vercel.app/allProducts/${params.id}`
+          ),
       },
       {
         path: "/events",
@@ -61,17 +67,12 @@ const router = createBrowserRouter([
         element: <ShopCreatePage />,
       },
       {
-        path: "/dashboard",
-        element: <ShopDashboardPage />,
+        path: "/inbox",
+        element: <Inbox />,
       },
       {
-        path: "/dashboard-create-product",
-        element: <ShopCreateProduct />,
-      },
-      /* todo */
-      {
-        path: "/shop/user",
-        element: <ShopHomePage />,
+        path: "/checkout",
+        element: <Checkout />,
       },
       {
         path: "/login",
@@ -83,19 +84,41 @@ const router = createBrowserRouter([
       },
     ],
   },
+  /* Seller Dashboard */
+  {
+    path: "/dashboard-seller",
+    element: <ShopDashboardPage />,
+    children: [
+      {
+        path: "/dashboard-seller/create-product",
+        element: <ShopCreateProduct />,
+      },
+    ],
+  },
+  /* Seller profile */
+  {
+    path: "/dashboard-seller/profile",
+    element: <ShopHomePage />,
+  },
+
+  /* Admin dashboard */
   {
     path: "/dashboard-admin",
     element: <Layout />,
-    children:[
+    children: [
       {
-        path:'/dashboard-admin/home',
-        element:<Dashboard/>,
+        path: "/dashboard-admin/home",
+        element: <Dashboard />,
       },
       {
-        path:'/dashboard-admin/users',
-        element:<AllUsers/>,
+        path: "/dashboard-admin/users",
+        element: <AllUsers />,
+      },
+      {
+        path:'/dashboard-admin/pending-products',
+        element:<PendingProducts/>
       }
-    ]
+    ],
   },
 ]);
 
