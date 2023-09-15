@@ -16,14 +16,14 @@ import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import UseAllWishlist from "../../../hooks/UseAllWishlist";
 import UseCartData from "../../../hooks/UseCartData";
 
-const ProductDetailCard = ({ setOpen, data }) => {
+const ProductDetailCard = ({ setOpen, data, click, cart }) => {
   const [count, setCount] = useState(1);
-  const [click, setClick] = useState(false);
+
   const { user } = UseAuth();
   const navigate = useNavigate();
   const [axiosSecure] = UseAxiosSecure();
   const [, refetch] = UseAllWishlist();
-  const [, cartDataRefetch] = UseCartData()
+  const [, cartDataRefetch] = UseCartData();
 
   const handleMessageSubmit = () => {};
   const decrementCount = () => {
@@ -39,9 +39,7 @@ const ProductDetailCard = ({ setOpen, data }) => {
     ? data.discount_price * count
     : data.price * count;
 
-
-
-    /* Handle add to wishlist */
+  /* Handle add to wishlist */
   const addToWishlist = (item) => {
     console.log(item);
     if (!user) {
@@ -72,7 +70,7 @@ const ProductDetailCard = ({ setOpen, data }) => {
         if (data.data.insertedId) {
           refetch();
 
-          setOpen(false)
+          setOpen(false);
           toast.success(`This product is now in your wishlist`, {
             position: "top-right",
             autoClose: 5000,
@@ -88,9 +86,12 @@ const ProductDetailCard = ({ setOpen, data }) => {
     }
   };
 
+  const handleNotification = () => {
+    toast.error("You have already bookmarked this product");
+  };
 
-/* Handle add to cart */
-  const handleAddToCart = (item) =>{
+  /* Handle add to cart */
+  const handleAddToCart = (item) => {
     console.log(item);
     if (!user) {
       Swal.fire({
@@ -106,11 +107,11 @@ const ProductDetailCard = ({ setOpen, data }) => {
         }
       });
     } else {
-      const { description, name,} = item;
+      const { description, name } = item;
       const addToCartProduct = {
         description,
         name,
-        price:parseFloat(totalPrice),
+        price: parseFloat(totalPrice),
         image: item.image_Url[0].url,
         email: user?.email,
         addToCartId: item._id,
@@ -118,8 +119,8 @@ const ProductDetailCard = ({ setOpen, data }) => {
 
       axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
         if (data.data.insertedId) {
-          cartDataRefetch()
-          setOpen(false)
+          cartDataRefetch();
+          setOpen(false);
           toast.success(`This product is now in your cart`, {
             position: "top-right",
             autoClose: 5000,
@@ -133,7 +134,7 @@ const ProductDetailCard = ({ setOpen, data }) => {
         }
       });
     }
-  }
+  };
 
   return (
     <div className="bg-[#fff]">
@@ -205,12 +206,12 @@ const ProductDetailCard = ({ setOpen, data }) => {
                     </button>
                   </div>
                   <div>
-                    {click ? (
+                    {click?.wishListId === data._id ? (
                       <AiFillHeart
+                        onClick={handleNotification}
                         size={22}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
-                        color={click ? "red" : "#333"}
+                        color={click?.wishListId === data._id ? "red" : "#333"}
                         title="Remove from wishlist"
                       />
                     ) : (
@@ -219,22 +220,22 @@ const ProductDetailCard = ({ setOpen, data }) => {
                         className="cursor-pointer"
                         onClick={() => {
                           addToWishlist(data);
-                          setClick(!click);
                         }}
-                        color={click ? "red" : "#333"}
+                        color="#333"
                         title="Add to wishlist"
                       />
                     )}
                   </div>
                 </div>
-                <div
-                onClick={()=>handleAddToCart(data)}
-                  className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
+                <button
+                  disabled={cart?.addToCartId === data._id}
+                  onClick={() => handleAddToCart(data)}
+                  className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center disabled:cursor-not-allowed disabled:bg-rose-700`}
                 >
                   <span className="text-[#fff] flex items-center">
                     Add to cart <AiOutlineShoppingCart className="ml-1" />
                   </span>
-                </div>
+                </button>
               </div>
             </div>
           </div>

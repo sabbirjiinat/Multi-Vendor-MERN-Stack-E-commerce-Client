@@ -6,6 +6,7 @@ import Events from "../../components/Events/Events";
 import Sponsored from "../../components/Route/Sponsored/Sponsored";
 
 const HomePage = () => {
+  window.scrollTo(0,0)
   return (
     <div>
       <Hero />

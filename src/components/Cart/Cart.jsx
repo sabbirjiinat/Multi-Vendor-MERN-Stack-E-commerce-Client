@@ -17,7 +17,10 @@ const Cart = ({ setOpenCart }) => {
   }
 
   return (
-    <div className="fixed   top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
+    <div
+    data-aos="fade-left"
+    data-aos-duration="500"
+    className="fixed   top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed  top-0 right-0 h-full w-[50%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
         <div>
           <div className="flex w-full justify-end pt-5 pr-5">
@@ -49,9 +52,7 @@ const Cart = ({ setOpenCart }) => {
         </div>
         <div className="px-5 mb-3">
           {/* Checkout button */}
-          <Link 
-          onClick={()=>setOpenCart(false)}
-          to="/checkout">
+          <Link onClick={() => setOpenCart(false)} to="/checkout">
             <div className="h-[45px] flex items-center justify-center w-[100%] bg-[#4437bc] hover:bg-[#3321cb] rounded-[6px] transition-colors">
               <h1 className="text-[#fff] text-[18px] font-[600]">
                 Checkout ${totalSumOfProducts}
@@ -68,6 +69,7 @@ const CartSingle = ({ data }) => {
   const [axiosSecure] = UseAxiosSecure();
   const [, cartDataRefetch] = UseCartData();
   const [value, setValue] = useState(1);
+
   const totalPrice = data.discount_price
     ? data.discount_price * value
     : data.price * value;
@@ -79,6 +81,8 @@ const CartSingle = ({ data }) => {
       }
     });
   };
+
+
 
   return (
     <div className="border-b p-4">

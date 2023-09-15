@@ -56,7 +56,10 @@ const Header = () => {
   });
   return (
     <>
-      <div className={`${styles.section}`}>
+      <div 
+      data-aos="fade-down"
+      data-aos-duration="1000"
+       className={`${styles.section}`}>
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
@@ -83,9 +86,7 @@ const Header = () => {
                 {searchData &&
                   searchData.map((i, index) => {
                     return (
-                      <Link key={index} to={`/product/${i._id}`}
-                     
-                      >
+                      <Link key={index} to={`/product/${i._id}`}>
                         <div className="w-full flex items-start py-3">
                           <img
                             src={i?.image_Url[0]?.url}
@@ -144,7 +145,7 @@ const Header = () => {
         >
           {/* Categories */}
           <div onClick={() => setDropDown(!dropDown)}>
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 800px:block">
               <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
@@ -232,7 +233,7 @@ const Header = () => {
       {/* Mobile Header */}
       <div
         className={`${active === true ? "shadow-sm fixed top-0 left-0" : null}
-      w-full -[60px] bg-[#fff] z-50 top-0 left-0 shadow-sm 800px:hidden`}
+      w-full h-[60px] bg-[#fff] z-50 top-0 left-0 shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>
@@ -243,7 +244,7 @@ const Header = () => {
             />
           </div>
           <div>
-            <Link t-="/">
+            <Link to="/">
               <img
                 src="https://shopo.quomodothemes.website/assets/images/logo.svg"
                 alt=""
@@ -254,14 +255,14 @@ const Header = () => {
             <div className="relative mr-[20px]">
               <AiOutlineShoppingCart size={30} />
               <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center cursor-pointer">
-                0
+                {addToCartProducts.length}
               </span>
             </div>
           </div>
         </div>
         {/* Header sidebar */}
         {open && (
-          <div className="fixed w-full bg-[#0000005f] h-full top-0 left-0">
+          <div className="fixed w-full bg-[#0000005f] h-full top-0 left-0 z-50">
             <div className="fixed w-[60%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
               <div className="w-full justify-between flex pr-3">
                 <div>
@@ -309,14 +310,37 @@ const Header = () => {
                 ) : null}
               </div>
               <Navbar />
-              <div className={`${styles.button} ml-4 !rounded-[4px]`}>
+              {!isSeller && !isAdmin && (
                 <Link to="/shop-create">
-                  <h1 className="text-[#fff] flex items-center">
-                    Become Seller
-                    <IoIosArrowForward className="ml-1" />
-                  </h1>
+                  <div className={`${styles.button} !rounded-[4px] ml-5`}>
+                    <h1 className="text-[#fff] flex items-center">
+                      Become Seller
+                      <IoIosArrowForward className="ml-1" />
+                    </h1>
+                  </div>
                 </Link>
-              </div>
+              )}
+              {isSeller && (
+                <Link to="/dashboard-seller">
+                  <div className={`${styles.button} !rounded-[4px] ml-5`}>
+                    <h1 className="text-[#fff] flex items-center">
+                      Dashboard
+                      <IoIosArrowForward className="ml-1" />
+                    </h1>
+                  </div>
+                </Link>
+              )}
+              {isAdmin && (
+                <Link to="/dashboard-admin/home">
+                  <div className={`${styles.button} !rounded-[4px] ml-5`}>
+                    <h1 className="text-[#fff] flex items-center">
+                      Dashboard
+                      <IoIosArrowForward className="ml-1" />
+                    </h1>
+                  </div>
+                </Link>
+              )}
+
               <br />
               <br />
               <br />

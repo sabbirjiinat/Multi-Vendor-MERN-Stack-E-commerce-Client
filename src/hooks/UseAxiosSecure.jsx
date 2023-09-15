@@ -8,7 +8,7 @@ const UseAxiosSecure = () => {
   const navigate = useNavigate();
 
   const axiosSecure = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: "https://multivendor-e-commerce-web-server.vercel.app",
   });
   useEffect(() => {
     axiosSecure.interceptors.request.use((config) => {

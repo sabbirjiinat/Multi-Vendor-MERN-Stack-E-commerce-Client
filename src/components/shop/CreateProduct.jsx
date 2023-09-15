@@ -13,7 +13,7 @@ import { TbFidgetSpinner } from "react-icons/tb";
 const CreateProduct = () => {
   // const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,reset } = useForm();
   const [axiosSecure] = UseAxiosSecure();
   const { user } = UseAuth();
   const [users] = UseAllUsers();
@@ -82,6 +82,7 @@ const CreateProduct = () => {
           .post("/allProducts", newProduct)
           .then((data) => {
             if (data.data.insertedId) {
+              reset()
               setLoading(false);
               toast.success(`Your product is pending now`, {
                 position: "top-right",

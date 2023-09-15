@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../../style/style";
 import { Rating } from "@smastrom/react-rating";
@@ -9,6 +9,7 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import {FaShoppingCart} from 'react-icons/fa'
 import ProductDetailCard from "./ProductDetailCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,18 +18,40 @@ import UseAuth from "../../../hooks/UseAuth";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import UseAllWishlist from "../../../hooks/UseAllWishlist";
 import UseCartData from "../../../hooks/UseCartData";
+import UseAdmin from "../../../hooks/UseAdmin";
+import { RxCross1 } from "react-icons/rx";
+import UseAllProducts from "../../../hooks/UseAllProducts";
 
 const ProductCard = ({ data }) => {
-  const [click, setClick] = useState(false);
+  const [click, setClick] = useState(null);
   const [open, setOpen] = useState(false);
   const { user } = UseAuth();
   const navigate = useNavigate();
   const [axiosSecure] = UseAxiosSecure();
-  const [, refetch] = UseAllWishlist();
-  const [, cartDataRefetch]= UseCartData()
+  const [wishlistProducts, refetch] = UseAllWishlist();
+  const [addToCartProducts, cartDataRefetch] = UseCartData();
+  const [isAdmin] = UseAdmin();
+  const [, approveProductsRefetch] = UseAllProducts();
+  const [cart,setCart] = useState(null)
+  console.log(cart);
+
+  useEffect(() => {
+    const findWishListProduct =
+      wishlistProducts &&
+      wishlistProducts.find((items) => items.wishListId === data._id);
+    setClick(findWishListProduct);
+  }, [data._id, wishlistProducts]);
+
+  useEffect(() => {
+    const findCartProduct =
+    addToCartProducts &&
+    addToCartProducts.find((items) => items.addToCartId === data._id);
+    setCart(findCartProduct);
+  }, [data._id, addToCartProducts]);
+
+
 
   const handleWishlist = (item) => {
-   
     if (!user) {
       Swal.fire({
         title: "You need to login first for wishlist!",
@@ -47,33 +70,23 @@ const ProductCard = ({ data }) => {
       const wishlistProduct = {
         description,
         name,
-        price:parseFloat(price),
+        price: parseFloat(price),
         image: item.image_Url[0].url,
         email: user?.email,
         wishListId: item._id,
-        discount_price:parseFloat(discount_price),
+        discount_price: parseFloat(discount_price),
       };
 
       axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
         if (data.data.insertedId) {
           refetch();
-          toast.success(`This product is now in your wishlist`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          toast.success(`This product is now in your wishlist`);
         }
       });
     }
   };
 
-
-  const handleAddToCart = (item) =>{
+  const handleAddToCart = (item) => {
     console.log(item);
     if (!user) {
       Swal.fire({
@@ -93,7 +106,7 @@ const ProductCard = ({ data }) => {
       const addToCartProduct = {
         description,
         name,
-        price:parseFloat(price),
+        price: parseFloat(price),
         image: item.image_Url[0].url,
         email: user?.email,
         addToCartId: item._id,
@@ -102,7 +115,7 @@ const ProductCard = ({ data }) => {
 
       axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
         if (data.data.insertedId) {
-          cartDataRefetch()
+          cartDataRefetch();
           toast.success(`This product is now in your cart`, {
             position: "top-right",
             autoClose: 5000,
@@ -116,7 +129,41 @@ const ProductCard = ({ data }) => {
         }
       });
     }
-  }
+  };
+
+  const handleDeleteProduct = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to delete this product!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/products/${item._id}`).then((data) => {
+          if (data.data.deletedCount > 0) {
+            approveProductsRefetch();
+            Swal.fire(
+              "Deleted!",
+              "This product is deleted successfully",
+              "success"
+            );
+          }
+        });
+      }
+    });
+  };
+
+  const handleNotification = () => {
+    toast.error("You have already bookmarked this product");
+  };
+  const handleCartNotify = () => {
+    toast.error("This product is already in cart");
+  };
+
+
 
   return (
     <>
@@ -150,18 +197,18 @@ const ProductCard = ({ data }) => {
             </h4>
           </div>
           <span className="font-[400] text-[17px] text-[#68d284]">
-            {data.total_sell ? data.total_sell:''} sold
+            {data.total_sell ? data.total_sell : ""} sold
           </span>
         </div>
         {/* Side options */}
         <div>
           {/* TODO: after wishlist the heart will be red */}
-          {click ? (
+          {click?.wishListId === data._id ? (
             <AiFillHeart
+              onClick={handleNotification}
               size={22}
               className="cursor-pointer absolute right-2 top-5"
-              onClick={() => setClick(!click)}
-              color={click ? "red" : "#333"}
+              color={click?.wishListId === data._id ? "red" : "#333"}
               title="Remove from wishlist"
             />
           ) : (
@@ -170,12 +217,12 @@ const ProductCard = ({ data }) => {
               className="cursor-pointer absolute right-2 top-5"
               onClick={() => {
                 handleWishlist(data);
-                setClick(!click);
               }}
-              color={click ? "red" : "#333"}
+              color="#333"
               title="Add to wishlist"
             />
           )}
+         
           <AiOutlineEye
             size={22}
             className="cursor-pointer absolute right-2 top-14"
@@ -183,17 +230,37 @@ const ProductCard = ({ data }) => {
             color="#333"
             title="Quick view"
           />
-          <AiOutlineShoppingCart
+           {cart?.addToCartId === data._id ?(
+              <FaShoppingCart
+              size={23}
+              className="cursor-pointer absolute right-2 top-24"
+              onClick={ handleCartNotify}
+              color={cart?.addToCartId === data._id ? "red" : "#444"}
+              title="Add to cart"
+            />
+           ):(
+            <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
             onClick={() => handleAddToCart(data)}
             color="#444"
             title="Add to cart"
           />
-          {open ? <ProductDetailCard setOpen={setOpen} data={data} /> : null}
+           )}
+          
+          {isAdmin && (
+            <RxCross1
+              size={25}
+              className="cursor-pointer absolute right-2 top-36"
+              onClick={() => handleDeleteProduct(data)}
+              color="#444"
+              title="Delete product"
+            />
+          )}
+          {open ? <ProductDetailCard setOpen={setOpen} data={data} click={click}  cart={cart} /> : null}
         </div>
         <ToastContainer
-          position="top-right"
+          position="top-center"
           autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}

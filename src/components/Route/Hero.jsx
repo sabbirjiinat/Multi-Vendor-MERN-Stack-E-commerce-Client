@@ -5,6 +5,8 @@ import styles from "../../style/style";
 const Hero = () => {
   return (
     <div
+    data-aos="fade-up"
+    data-aos-duration="1000"
       className={`banner-background min-h-[70vh] 800px:min-h-[80vh] w-full bg-no-repeat bg-cover ${styles.noramlFlex}`}
  
     >

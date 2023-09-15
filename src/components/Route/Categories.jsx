@@ -10,7 +10,10 @@ const Categories = () => {
   const { setCategory } = UseAuth();
   return (
     <>
-      <div className={`${styles.section} hidden sm:block`}>
+      <div
+       data-aos="fade-up"
+       data-aos-duration="500"
+      className={`${styles.section} hidden sm:block`}>
         <div
           className={`branding my-12 flex justify-between w-full shadow-sm bg-white p-3 rounded-md`}
         >
@@ -32,10 +35,12 @@ const Categories = () => {
       </div>
 
       <div
+      data-aos="fade-up"
+      data-aos-duration="500"
         className={`${styles.section} bg-white p-6 rounded-lg mb-12`}
         id="categories"
       >
-        <div className="grid grid-cols-1 gap-[5px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]">
+        <div className="grid grid-cols-1 gap-[5px] md:grid-cols-3 md:gap-[10px] lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]">
           {categoriesData &&
             categoriesData.map((i) => {
               const handleSubmit = (i) => {

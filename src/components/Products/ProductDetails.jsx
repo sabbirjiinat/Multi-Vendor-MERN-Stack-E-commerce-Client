@@ -16,6 +16,7 @@ import UseAllWishlist from "../../hooks/UseAllWishlist";
 import UseCartData from "../../hooks/UseCartData";
 
 const ProductDetails = ({ data }) => {
+  console.log(data);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   // const [select, setSelect] = useState(0);
@@ -266,6 +267,7 @@ const ProductDetails = ({ data }) => {
         </div>
       ) : null}
     </div>
+  
   );
 };
 

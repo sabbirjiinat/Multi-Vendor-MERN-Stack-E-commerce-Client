@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         element: <ProductDetailPage />,
         loader: ({ params }) =>
           fetch(
-            `https://multivendor-e-commerce-web-server.vercel.app/allProducts/${params.id}`
+            `https://multivendor-e-commerce-web-server.vercel.app/products/${params.id}`
           ),
       },
       {

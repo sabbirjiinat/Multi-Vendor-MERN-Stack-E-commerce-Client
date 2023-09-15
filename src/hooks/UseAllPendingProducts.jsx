@@ -9,7 +9,7 @@ const UseAllPendingProducts = () => {
       queryFn: async () => {
         setLoader(true);
         const res = await axiosSecure.get(
-          `/allProducts/pending`
+          `/products/status/pending`
         );
         setLoader(false);
         const data = res.data;

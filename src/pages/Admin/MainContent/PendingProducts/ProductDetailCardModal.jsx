@@ -2,13 +2,20 @@ import { RxCross1 } from "react-icons/rx";
 import styles from "../../../../style/style";
 import { AiOutlineMessage } from "react-icons/ai";
 import UseAxiosSecure from "../../../../hooks/UseAxiosSecure";
+import Swal from "sweetalert2";
+import UseAllPendingProducts from "../../../../hooks/UseAllPendingProducts";
 const ProductDetailCardModal = ({ setOpen, data }) => {
   const [axiosSecure] = UseAxiosSecure();
+  const [, refetch] = UseAllPendingProducts();
   const handleApproveProduct = (item) => {
     axiosSecure
       .patch(`/allProducts/${item._id}`, { status: "approve" })
       .then((data) => {
-        console.log(data);
+        if (data.data.modifiedCount > 0) {
+          refetch();
+          setOpen(false);
+          Swal.fire("Deleted!", "Product is approved done!", "success");
+        }
       });
   };
   return (
