@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const BestDeals = () => {
   const [products, setProducts] = useState([]);
-  console.log(products);
+
   useEffect(() => {
     fetch(
       "https://multivendor-e-commerce-web-server.vercel.app/products/status/approve"

@@ -17,9 +17,9 @@ import AllUsers from "../pages/Admin/MainContent/AllUser/AllUsers";
 import Layout from "../pages/Admin/Layout/Layout";
 import Dashboard from "../pages/Admin/Dashboard";
 import CategoriesProducts from "../pages/CategoriesProducts/CategoriesProducts";
-import Checkout from "../pages/Checkout/Checkout";
 import Inbox from '../pages/Inbox/Inbox'
 import PendingProducts from '../pages/Admin/MainContent/PendingProducts/PendingProducts'
+import Payment from "../pages/Checkout/Payment";
 
 const router = createBrowserRouter([
   {
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout",
-        element: <Checkout />,
+        element: <Payment />,
       },
       {
         path: "/login",

@@ -41,7 +41,7 @@ const ProductDetailCard = ({ setOpen, data, click, cart }) => {
 
   /* Handle add to wishlist */
   const addToWishlist = (item) => {
-    console.log(item);
+
     if (!user) {
       Swal.fire({
         title: "You need to login first for wishlist!",
@@ -60,10 +60,13 @@ const ProductDetailCard = ({ setOpen, data, click, cart }) => {
       const wishlistProduct = {
         description,
         name,
-        price: parseFloat(totalPrice),
+        price: parseFloat(
+          data.discount_price ? data.discount_price : data.price
+        ),
         image: item.image_Url[0].url,
         email: user?.email,
         wishListId: item._id,
+        quantity: parseInt(count),
       };
 
       axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
@@ -92,7 +95,7 @@ const ProductDetailCard = ({ setOpen, data, click, cart }) => {
 
   /* Handle add to cart */
   const handleAddToCart = (item) => {
-    console.log(item);
+
     if (!user) {
       Swal.fire({
         title: "You need to login first for add to cart!",
@@ -111,10 +114,13 @@ const ProductDetailCard = ({ setOpen, data, click, cart }) => {
       const addToCartProduct = {
         description,
         name,
-        price: parseFloat(totalPrice),
+        price: parseFloat(
+          data.discount_price ? data.discount_price : data.price
+        ),
         image: item.image_Url[0].url,
         email: user?.email,
         addToCartId: item._id,
+        quantity: parseInt(count),
       };
 
       axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {

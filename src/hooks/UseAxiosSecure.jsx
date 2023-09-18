@@ -3,13 +3,15 @@ import UseAuth from "./UseAuth";
 import axios from "axios";
 import { useEffect } from "react";
 
+const axiosSecure = axios.create({
+  baseURL: "http://localhost:8000",
+});
+
 const UseAxiosSecure = () => {
   const { logOut } = UseAuth();
   const navigate = useNavigate();
+  // "https://multivendor-e-commerce-web-server.vercel.app"
 
-  const axiosSecure = axios.create({
-    baseURL: "https://multivendor-e-commerce-web-server.vercel.app",
-  });
   useEffect(() => {
     axiosSecure.interceptors.request.use((config) => {
       const token = localStorage.getItem("access-token");
@@ -22,8 +24,8 @@ const UseAxiosSecure = () => {
       (response) => response,
       async (error) => {
         if (
-          (error.response && error.response.status === 401) ||
-          error.response.status === 403
+          (error?.response && error?.response?.status === 401) ||
+          error?.response?.status === 403
         ) {
           await logOut();
           navigate("/login");
@@ -31,7 +33,7 @@ const UseAxiosSecure = () => {
         return Promise.reject(error);
       }
     );
-  }, [logOut, navigate, axiosSecure]);
+  }, [logOut, navigate]);
   return [axiosSecure];
 };
 

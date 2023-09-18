@@ -79,7 +79,7 @@ const SingUpPage = () => {
         theme: "light",
       });
     }
-    console.log(data.image[0].name);
+   
 
     const url = `https://api.imgbb.com/1/upload?key=${
       import.meta.env.VITE_IMGBB_KEY
@@ -93,7 +93,6 @@ const SingUpPage = () => {
     })
       .then((res) => res.json())
       .then((imageUrl) => {
-        console.log(imageUrl);
         const image_url = imageUrl.data.display_url;
         createUserWithEmail(data.email, data.password)
           .then((result) => {

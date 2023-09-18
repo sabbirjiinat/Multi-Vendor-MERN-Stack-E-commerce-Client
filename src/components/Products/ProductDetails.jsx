@@ -16,7 +16,6 @@ import UseAllWishlist from "../../hooks/UseAllWishlist";
 import UseCartData from "../../hooks/UseCartData";
 
 const ProductDetails = ({ data }) => {
-  console.log(data);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   // const [select, setSelect] = useState(0);
@@ -42,7 +41,7 @@ const ProductDetails = ({ data }) => {
 
   /* Handle add to wishlist */
   const addToWishlist = (item) => {
-    console.log(item);
+  
     if (!user) {
       Swal.fire({
         title: "You need to login first for wishlist!",
@@ -88,7 +87,7 @@ const ProductDetails = ({ data }) => {
 
   /* Handle add to cart */
   const handleAddToCart = (item) => {
-    console.log(item);
+  
     if (!user) {
       Swal.fire({
         title: "You need to login first for add to cart!",

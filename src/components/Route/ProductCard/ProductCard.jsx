@@ -33,7 +33,7 @@ const ProductCard = ({ data }) => {
   const [isAdmin] = UseAdmin();
   const [, approveProductsRefetch] = UseAllProducts();
   const [cart,setCart] = useState(null)
-  console.log(cart);
+
 
   useEffect(() => {
     const findWishListProduct =
@@ -70,11 +70,11 @@ const ProductCard = ({ data }) => {
       const wishlistProduct = {
         description,
         name,
-        price: parseFloat(price),
+        price: parseFloat(discount_price ? discount_price : price),
         image: item.image_Url[0].url,
         email: user?.email,
         wishListId: item._id,
-        discount_price: parseFloat(discount_price),
+        quantity:parseInt(1)
       };
 
       axiosSecure.post(`/wishlist`, wishlistProduct).then((data) => {
@@ -87,7 +87,7 @@ const ProductCard = ({ data }) => {
   };
 
   const handleAddToCart = (item) => {
-    console.log(item);
+
     if (!user) {
       Swal.fire({
         title: "You need to login first for add to cart!",
@@ -106,18 +106,18 @@ const ProductCard = ({ data }) => {
       const addToCartProduct = {
         description,
         name,
-        price: parseFloat(price),
+        price: parseFloat(discount_price ? discount_price : price),
         image: item.image_Url[0].url,
         email: user?.email,
         addToCartId: item._id,
-        discount_price: parseFloat(discount_price),
+        quantity:parseInt(1)
       };
 
       axiosSecure.post(`/addToCart`, addToCartProduct).then((data) => {
         if (data.data.insertedId) {
           cartDataRefetch();
           toast.success(`This product is now in your cart`, {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,

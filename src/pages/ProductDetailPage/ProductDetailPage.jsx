@@ -5,7 +5,7 @@ import SuggestedProduct from "../../components/Products/SuggestedProduct";
 const ProductDetailPage = () => {
   const singleProducts = useLoaderData();
   window.scrollTo(0, 0);
-  console.log(singleProducts);
+
 
   return (
     <div>

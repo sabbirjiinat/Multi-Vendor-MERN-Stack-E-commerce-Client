@@ -1,7 +1,7 @@
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../style/style";
 import { IoBagHandleOutline } from "react-icons/io5";
-import { HiOutlineMinus, HiPlus } from "react-icons/hi";
+// import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import UseCartData from "../../hooks/UseCartData";
@@ -11,16 +11,16 @@ const Cart = ({ setOpenCart }) => {
 
   let totalSumOfProducts = 0;
   for (const product of addToCartProducts) {
-    totalSumOfProducts = product.discount_price
-      ? product.discount_price + totalSumOfProducts
-      : product.price + totalSumOfProducts;
+   const multiply= product.price * product.quantity;
+   totalSumOfProducts = totalSumOfProducts + multiply
   }
 
   return (
     <div
-    data-aos="fade-left"
-    data-aos-duration="500"
-    className="fixed   top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
+      data-aos="fade-left"
+      data-aos-duration="500"
+      className="fixed   top-0 left-0 w-full bg-[#0000004b] h-screen z-10"
+    >
       <div className="fixed  top-0 right-0 h-full w-[50%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
         <div>
           <div className="flex w-full justify-end pt-5 pr-5">
@@ -41,16 +41,19 @@ const Cart = ({ setOpenCart }) => {
           <br />
           <div className="w-full border-t">
             {addToCartProducts &&
-              addToCartProducts.map((i, index) => (
-                <CartSingle
-                  key={index}
-                  totalSumOfProducts={totalSumOfProducts}
-                  data={i}
-                />
-              ))}
+              addToCartProducts.map((i, index) => {
+                return (
+                  <CartSingle
+                    key={index}
+                    totalSumOfProducts={totalSumOfProducts}
+                    data={i}
+                  />
+                );
+              })}
           </div>
         </div>
-        <div className="px-5 mb-3">
+        {addToCartProducts.length > 0 && (
+          <div className="px-5 mb-3">
           {/* Checkout button */}
           <Link onClick={() => setOpenCart(false)} to="/checkout">
             <div className="h-[45px] flex items-center justify-center w-[100%] bg-[#4437bc] hover:bg-[#3321cb] rounded-[6px] transition-colors">
@@ -60,6 +63,7 @@ const Cart = ({ setOpenCart }) => {
             </div>
           </Link>
         </div>
+        )}
       </div>
     </div>
   );
@@ -68,11 +72,8 @@ const Cart = ({ setOpenCart }) => {
 const CartSingle = ({ data }) => {
   const [axiosSecure] = UseAxiosSecure();
   const [, cartDataRefetch] = UseCartData();
-  const [value, setValue] = useState(1);
-
-  const totalPrice = data.discount_price
-    ? data.discount_price * value
-    : data.price * value;
+  const [value] = useState(data.quantity ? data.quantity : 1);
+  const totalPrice = data.price * value;
 
   const handleDeleteCartProduct = (item) => {
     axiosSecure.delete(`/addToCart/${item._id}`).then((data) => {
@@ -82,12 +83,10 @@ const CartSingle = ({ data }) => {
     });
   };
 
-
-
   return (
     <div className="border-b p-4">
       <div className="w-full flex items-center justify-between">
-        <div>
+        {/* <div>
           <div
             className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.noramlFlex} justify-center cursor-pointer`}
             onClick={() => setValue(value + 1)}
@@ -101,7 +100,7 @@ const CartSingle = ({ data }) => {
           >
             <HiOutlineMinus size={16} color="#7d879c" />
           </div>
-        </div>
+        </div> */}
         <img src={data.image} alt="" className="w-[80px] ml-2" />
         <div className="pl-[5px]">
           <h1>{data.name.slice(0, 30)}...</h1>
