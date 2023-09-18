@@ -7,10 +7,10 @@ const axiosSecure = axios.create({
   baseURL: "http://localhost:8000",
 });
 
+// "https://multivendor-e-commerce-web-server.vercel.app"
 const UseAxiosSecure = () => {
   const { logOut } = UseAuth();
   const navigate = useNavigate();
-  // "https://multivendor-e-commerce-web-server.vercel.app"
 
   useEffect(() => {
     axiosSecure.interceptors.request.use((config) => {

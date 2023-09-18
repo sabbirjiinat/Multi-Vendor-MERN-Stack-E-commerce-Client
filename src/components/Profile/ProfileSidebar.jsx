@@ -1,11 +1,11 @@
 import {
-  AiOutlineCreditCard,
+  
   AiOutlineLogin,
   AiOutlineMessage,
 } from "react-icons/ai";
-import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
+import {  HiOutlineShoppingBag } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
-import { TbAddressBook } from "react-icons/tb";
+
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
@@ -42,19 +42,7 @@ const ProfileSidebar = ({ setActive, active }) => {
           Order
         </span>
       </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(3)}
-      >
-        <HiOutlineReceiptRefund size={20} color={active === 3 ? "red" : ""} />
-        <span
-          className={`pl-3 hidden 800px:block ${
-            active === 3 ? "text-[red]" : ""
-          }`}
-        >
-          Refunds
-        </span>
-      </div>
+    
       <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(4) || navigate("/inbox")}
@@ -69,32 +57,8 @@ const ProfileSidebar = ({ setActive, active }) => {
         </span>
       </div>
 
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(6)}
-      >
-        <AiOutlineCreditCard size={20} color={active === 6 ? "red" : ""} />
-        <span
-          className={`pl-3 hidden 800px:block ${
-            active === 6 ? "text-[red]" : ""
-          }`}
-        >
-          Payment Methods
-        </span>
-      </div>
-      <div
-        className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(7)}
-      >
-        <TbAddressBook size={20} color={active === 7 ? "red" : ""} />
-        <span
-          className={`pl-3 hidden 800px:block ${
-            active === 7 ? "text-[red]" : ""
-          }`}
-        >
-          Address
-        </span>
-      </div>
+     
+    
       <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => {

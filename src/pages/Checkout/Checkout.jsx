@@ -77,6 +77,8 @@ const Checkout = () => {
         itemImage: addToCartProducts.map((item) => item.image),
         status: "pending",
         date: new Date(),
+        amount:parseFloat(price),
+        quantity:addToCartProducts.length
       };
       axiosSecure.post("/payment", paymentProduct).then((res) => {
         if (res.data.result.insertedId) {

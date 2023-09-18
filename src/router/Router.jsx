@@ -20,6 +20,7 @@ import CategoriesProducts from "../pages/CategoriesProducts/CategoriesProducts";
 import Inbox from '../pages/Inbox/Inbox'
 import PendingProducts from '../pages/Admin/MainContent/PendingProducts/PendingProducts'
 import Payment from "../pages/Checkout/Payment";
+import Orders from "../pages/Admin/MainContent/Orders";
 
 const router = createBrowserRouter([
   {
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
       {
         path:'/dashboard-admin/pending-products',
         element:<PendingProducts/>
+      },
+      {
+        path:'/dashboard-admin/orders',
+        element:<Orders/>
       }
     ],
   },
